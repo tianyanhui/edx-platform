@@ -5,6 +5,10 @@ These are notable changes in edx-platform.  This is a rolling list of changes,
 in roughly chronological order, most recent first.  Add your entries at or near
 the top.  Include a label indicating the component affected.
 
+Common: Added configurable backends for tracking events. Tracking events using
+the python logging module is the default backend. Support for MongoDB and a
+Django database is also available.
+
 LMS: Added alphabetical sorting of forum categories and subcategories.
 It is hidden behind a false defaulted course level flag.
 
@@ -277,4 +281,3 @@ Common: Updated CodeJail.
 Common: Allow setting of authentication session cookie name.
 
 LMS: Option to email students when enroll/un-enroll them.
-
