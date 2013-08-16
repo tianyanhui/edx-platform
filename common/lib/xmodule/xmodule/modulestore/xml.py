@@ -21,6 +21,9 @@ from xmodule.x_module import XModuleDescriptor, XMLParsingSystem
 
 from xmodule.html_module import HtmlDescriptor
 
+# TODO: Don't do this - cpennington
+from xblock.test.test_core import DictModel
+
 from . import ModuleStoreBase, Location, XML_MODULESTORE_TYPE
 from .exceptions import ItemNotFoundError
 from .inheritance import compute_inherited_metadata
@@ -469,7 +472,7 @@ class XMLModuleStore(ModuleStoreBase):
                     loc = Location('i4x', course_descriptor.location.org, course_descriptor.location.course, category, slug)
                     module = HtmlDescriptor(
                         system,
-                        {'data': html, 'location': loc, 'category': category}
+                        DictModel({'data': html, 'location': loc, 'category': category}),
                     )
                     # VS[compat]:
                     # Hack because we need to pull in the 'display_name' for static tabs (because we need to edit them)

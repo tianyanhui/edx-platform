@@ -26,6 +26,9 @@ from xmodule.xml_module import is_pointer_tag, name_to_pathname
 from xmodule.modulestore import Location
 from xblock.core import Scope, String, Boolean, Float, List, Integer
 
+# TODO: Don't do this - cpennington
+from xblock.test.test_core import DictModel
+
 import datetime
 import time
 
@@ -204,7 +207,7 @@ class VideoDescriptor(VideoFields, TabsEditingDescriptor, EmptyDataRawDescriptor
         # it out and set the metadata fields
         if self.data:
             model_data = VideoDescriptor._parse_video_xml(self.data)
-            self._model_data.update(model_data)
+            self._model_data.set_many(model_data)
             del self.data
 
     @classmethod
@@ -229,7 +232,10 @@ class VideoDescriptor(VideoFields, TabsEditingDescriptor, EmptyDataRawDescriptor
             xml_data = etree.tostring(cls.load_file(filepath, system.resources_fs, location))
         model_data = VideoDescriptor._parse_video_xml(xml_data)
         model_data['location'] = location
-        video = cls(system, model_data)
+        video = cls(
+            system,
+            DictModel(model_data),
+        )
         return video
 
     def definition_to_xml(self, resource_fs):

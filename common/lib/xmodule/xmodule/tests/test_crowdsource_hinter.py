@@ -8,6 +8,7 @@ import copy
 
 from xmodule.crowdsource_hinter import CrowdsourceHinterModule
 from xmodule.vertical_module import VerticalModule, VerticalDescriptor
+from xblock.test.test_core import DictModel
 
 from . import get_test_system
 
@@ -139,7 +140,7 @@ class CHModuleFactory(object):
                 return capa_module
         system.get_module = fake_get_module
 
-        module = CrowdsourceHinterModule(system, descriptor, model_data)
+        module = CrowdsourceHinterModule(system, descriptor, DictModel(model_data))
 
         return module
 
