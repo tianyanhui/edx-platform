@@ -684,8 +684,8 @@ class XModuleDescriptor(XModuleFields, HTMLSnippet, ResourceTemplates, XBlock):
         result = {}
         # the 'field.name in' is the magic which ensures it's locally set not the _model_data[field.name]
         for field in self.iterfields():
-            if (field.scope == scope and field.name in self._model_data):
-                result[field.name] = self._model_data[field.name]
+            if (field.scope == scope and self._model_data.has(field.name)):
+                result[field.name] = self._model_data.get(field.name)
         return result
 
     @property
@@ -829,7 +829,7 @@ class DescriptorSystem(Runtime):
 
         # This method 'knows' about our 2 different kvs's and how they store data.
         result = {}
-        result['explicitly_set'] = field.name in xblock._model_data
+        result['explicitly_set'] = xblock._model_data.has(field.name)
         try:
             block_inherited = xblock.xblock_kvs.inherited_settings
         except AttributeError:  # inherited_settings doesn't exist on kvs
