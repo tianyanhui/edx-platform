@@ -13,9 +13,6 @@ from xmodule.modulestore.inheritance import own_metadata, InheritanceKeyValueSto
 from xmodule.modulestore.xml_exporter import EdxJSONEncoder
 from xblock.runtime import DbModel
 
-# TODO: Don't do this - cpennington
-from xblock.test.test_core import DictModel
-
 log = logging.getLogger(__name__)
 
 # assume all XML files are persisted as utf-8.
@@ -375,7 +372,7 @@ class XmlDescriptor(XModuleDescriptor):
 
         return cls(
             system,
-            DictModel(model_data),
+            model_data,
         )
 
     @classmethod

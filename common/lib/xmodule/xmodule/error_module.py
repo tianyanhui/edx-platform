@@ -17,9 +17,6 @@ from xmodule.modulestore.inheritance import InheritanceKeyValueStore
 from xblock.runtime import DbModel
 from xmodule.xml_module import XmlUsage
 
-# TODO: Don't do this - cpennington
-from xblock.test.test_core import DictModel
-
 
 log = logging.getLogger(__name__)
 
@@ -101,13 +98,13 @@ class ErrorDescriptor(ErrorFields, XModuleDescriptor):
             )
 
         # real metadata stays in the content, but add a display name
-        model_data = DictModel({
+        model_data = {
             'error_msg': str(error_msg),
             'contents': contents,
             'display_name': 'Error: ' + location.url(),
             'location': location,
             'category': 'error'
-        })
+        }
         kvs = InheritanceKeyValueStore(initial_values=model_data)
         model_data = DbModel(kvs, cls, None, XmlUsage('error', location))
         return cls(
