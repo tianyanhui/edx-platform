@@ -219,6 +219,7 @@ class ContentStoreToyCourseTest(ModuleStoreTestCase):
                                                'course', '2012_Fall', None]), depth=None)
         html_module = draft_store.get_item(['i4x', 'edX', 'simple', 'html', 'test_html', None])
 
+        self.assertNotIn('graceperiod', own_metadata(html_module))
         self.assertEqual(html_module.lms.graceperiod, course.lms.graceperiod)
         self.assertNotIn('graceperiod', own_metadata(html_module))
 

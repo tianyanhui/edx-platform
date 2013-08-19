@@ -78,10 +78,8 @@ class MongoKeyValueStore(InheritanceKeyValueStore):
         elif key.scope == Scope.settings:
             if key.field_name in self._metadata:
                 return self._metadata[key.field_name]
-            elif key.field_name in self.inherited_settings:
-                return self.inherited_settings[key.field_name]
             else:
-                raise KeyError()  # get the default
+                raise KeyError()  # get the default which may be the inherited value
         elif key.scope == Scope.content:
             if key.field_name == 'location':
                 return self._location

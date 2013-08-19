@@ -67,7 +67,7 @@ class TestXBlockWrapper(object):
     def leaf_module_runtime(self):
         runtime = Mock()
         runtime.render_template = lambda *args, **kwargs: u'{!r}, {!r}'.format(args, kwargs)
-        runtime.get_field_provenance = lambda field: mock_unsupported_fn()
+        runtime.get_field_provenance = lambda xblock, field: mock_unsupported_fn()
         runtime.anonymous_student_id = 'dummy_anonymous_student_id'
         runtime.open_ended_grading_interface = {}
         runtime.seed = 5
@@ -80,7 +80,7 @@ class TestXBlockWrapper(object):
     def leaf_descriptor_runtime(self):
         runtime = Mock()
         runtime.render_template = lambda *args, **kwargs: u'{!r}, {!r}'.format(args, kwargs)
-        runtime.get_field_provenance = lambda field: mock_unsupported_fn()
+        runtime.get_field_provenance = lambda xblock, field: mock_unsupported_fn()
         return runtime
 
     def leaf_descriptor(self, descriptor_cls):
@@ -105,7 +105,7 @@ class TestXBlockWrapper(object):
     def container_descriptor_runtime(self):
         runtime = Mock()
         runtime.render_template = lambda *args, **kwargs: u'{!r}, {!r}'.format(args, kwargs)
-        runtime.get_field_provenance = lambda field: mock_unsupported_fn()
+        runtime.get_field_provenance = lambda xblock, field: mock_unsupported_fn()
         return runtime
 
     def container_descriptor(self, descriptor_cls):
