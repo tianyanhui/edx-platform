@@ -696,7 +696,9 @@ class XModuleDescriptor(XModuleFields, HTMLSnippet, ResourceTemplates, XBlock):
         Can be limited by extending `non_editable_metadata_fields`.
         """
         metadata_fields = {}
-        for field in self.iterfields():
+        # Not clear why this should be fields v iterfields(). e.g., why some namespaced fields
+        # should be seen in course and problem but not chapter
+        for field in self.fields:
 
             if field.scope != Scope.settings or field in self.non_editable_metadata_fields:
                 continue
@@ -707,7 +709,7 @@ class XModuleDescriptor(XModuleFields, HTMLSnippet, ResourceTemplates, XBlock):
             except AttributeError:
                 # dhm: i believe only our crufty test systems can get here (in particular get_test_system)
                 metadata_fields[field.name] = {
-                    'default_value': field.default,
+                    'default_value': field.to_json(field.default),
                     'inheritable': False,
                     'explicitly_set': self._model_data.has(field.name)
                 }
@@ -816,7 +818,8 @@ class DescriptorSystem(Runtime):
         """
         For the given xblock, return a dict for the field's current state:
         {
-            'default_value': what value will take effect if field is unset: either the field default or,
+            'default_value': what json'd value will take effect if field is unset: either the field default or
+            inherited value,
             'inheritable': whether the default comes via inheritance rather than field default (boolean),
             'explicitly_set': boolean for whether the current value is set v default/inherited,
         }
@@ -827,7 +830,6 @@ class DescriptorSystem(Runtime):
         # which needs this level of introspection right now. runtime also is 'allowed' to know
         # about the kvs, dbmodel, etc.
 
-        # This method 'knows' about our 2 different kvs's and how they store data.
         result = {}
         result['explicitly_set'] = xblock._model_data.has(field.name)
         try:
@@ -835,10 +837,10 @@ class DescriptorSystem(Runtime):
         except AttributeError:  # inherited_settings doesn't exist on kvs
             block_inherited = {}
         if field.name in block_inherited:
-            result['default_value'] = block_inherited[field.name]
+            result['default_value'] = field.to_json(block_inherited[field.name])
             result['inheritable'] = True
         else:
-            result['default_value'] = field.default
+            result['default_value'] = field.to_json(field.default)
             result['inheritable'] = False
         return result
 
@@ -853,8 +855,10 @@ class XMLParsingSystem(DescriptorSystem):
         process_xml: Takes an xml string, and returns a XModuleDescriptor
             created from that xml
         """
-        DescriptorSystem.__init__(self, load_item, resources_fs, error_tracker,
-                                  **kwargs)
+        super(XMLParsingSystem, self).__init__(
+            self, load_item, resources_fs, error_tracker,
+            **kwargs
+        )
         self.process_xml = process_xml
         self.policy = policy
 

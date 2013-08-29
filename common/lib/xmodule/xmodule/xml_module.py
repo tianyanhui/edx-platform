@@ -368,7 +368,7 @@ class XmlDescriptor(XModuleDescriptor):
         fields['category'] = xml_object.tag
         kvs = InheritanceKeyValueStore(initial_values=fields)
         # is there a good way to get the org/course/run or does it matter? (this is not the /run)
-        model_data = DbModel(kvs, cls, None, XmlUsage(location.course_id, location))
+        model_data = DbModel(kvs, cls, None, XmlUsage(location, location))
 
         return cls(
             system,

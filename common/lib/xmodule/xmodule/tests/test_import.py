@@ -275,14 +275,14 @@ class ImportTestCase(BaseCourseTestCase):
         print("Starting import")
         course = self.get_course('toy')
 
-        def check_for_key(key, node):
-            "recursive check for presence of key"
+        def check_graceperiod(node):
+            "recursive check for inherited value"
             print("Checking {0}".format(node.location.url()))
-            self.assertTrue(node._model_data.has(key))
+            self.assertEqual(node.lms.graceperiod, course.lms.graceperiod)
             for c in node.get_children():
-                check_for_key(key, c)
+                check_graceperiod(c)
 
-        check_for_key('graceperiod', course)
+        check_graceperiod(course)
 
     def test_policy_loading(self):
         """Make sure that when two courses share content with the same

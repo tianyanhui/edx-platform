@@ -25,7 +25,7 @@ def import_static_content(modules, course_loc, course_data_path, static_content_
 
     verbose = True
 
-    for dirname, dirnames, filenames in os.walk(static_dir):
+    for dirname, _, filenames in os.walk(static_dir):
         for filename in filenames:
 
             try:
@@ -129,8 +129,8 @@ def import_from_xml(store, data_dir, course_dirs=None,
                     module = remap_namespace(module, target_location_namespace)
 
                     if not do_import_static:
-                        module.lms.static_asset_path = module.data_dir			# for old-style xblock where this was actually linked to kvs
-                        module._model_data['static_asset_path'] = module.data_dir
+                        module.lms.static_asset_path = module.data_dir  # for old-style xblock where this was actually linked to kvs
+                        module._model_data.set('static_asset_path', module.data_dir)
                         log.debug('course static_asset_path={0}'.format(module.lms.static_asset_path))
 
                     log.debug('course data_dir={0}'.format(module.data_dir))
