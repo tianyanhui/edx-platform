@@ -855,8 +855,9 @@ class XMLParsingSystem(DescriptorSystem):
         process_xml: Takes an xml string, and returns a XModuleDescriptor
             created from that xml
         """
-        super(XMLParsingSystem, self).__init__(
-            self, load_item, resources_fs, error_tracker,
+        DescriptorSystem.__init__(
+            self,
+            load_item, resources_fs, error_tracker,
             **kwargs
         )
         self.process_xml = process_xml

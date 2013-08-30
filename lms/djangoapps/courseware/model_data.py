@@ -333,6 +333,14 @@ class LmsKeyValueStore(KeyValueStore):
         else:
             return json.loads(field_object.value)
 
+    def default(self, key):
+        """
+        Defer to descriptor for default
+        inheritance rather than from the field's global default
+        """
+        # does this need to check scope?
+        return self._descriptor_model_data.default(key.field_name)
+
     def set(self, key, value):
         """
         Set a single value in the KeyValueStore
