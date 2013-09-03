@@ -13,9 +13,7 @@ from xmodule.x_module import XModule, XModuleDescriptor
 from xmodule.errortracker import exc_info_to_str
 from xmodule.modulestore import Location
 from xblock.core import String, Scope
-from xmodule.modulestore.inheritance import InheritanceKeyValueStore
-from xblock.runtime import DbModel
-from xmodule.xml_module import XmlUsage
+from xblock.test.test_core import DictModel
 
 
 log = logging.getLogger(__name__)
@@ -105,11 +103,9 @@ class ErrorDescriptor(ErrorFields, XModuleDescriptor):
             'location': location,
             'category': 'error'
         }
-        kvs = InheritanceKeyValueStore(initial_values=model_data)
-        model_data = DbModel(kvs, cls, None, XmlUsage('error', location))
         return cls(
             system,
-            model_data,
+            DictModel(model_data),
         )
 
     def get_context(self):

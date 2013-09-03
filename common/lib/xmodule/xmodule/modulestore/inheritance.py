@@ -23,7 +23,11 @@ def compute_inherited_metadata(descriptor):
     NOTE: This means that there is no such thing as lazy loading at the
     moment--this accesses all the children."""
     # compute the values to be inherited by the children
-    parent_metadata = descriptor.xblock_kvs.inherited_settings.copy()
+    try:
+        parent_metadata = descriptor.xblock_kvs.inherited_settings.copy()
+    except AttributeError:
+        # the descriptor does not have a kvs or inherited_settings; so, cannot participate
+        return
     if descriptor.has_children:
         # add any of descriptor's explicitly set fields to the inheriting list
         for field in INHERITABLE_METADATA:
@@ -45,7 +49,11 @@ def inherit_metadata(descriptor, inherited_data):
     `inherited_data`: A dictionary mapping field names to the values that
         they should inherit
     """
-    descriptor.xblock_kvs.inherited_settings = inherited_data
+    try:
+        descriptor.xblock_kvs.inherited_settings = inherited_data
+    except AttributeError:
+        # should only occur on error descriptors, but if it occurs, the element cannot handle inheritance
+        pass
 
 def own_metadata(module):
     """
@@ -61,19 +69,8 @@ class InheritanceKeyValueStore(KeyValueStore):
     """
     def __init__(self, initial_values=None, inherited_settings=None):
         super(InheritanceKeyValueStore, self).__init__()
-        self._inherited_settings = inherited_settings or {}
+        self.inherited_settings = inherited_settings or {}
         self._fields = initial_values or {}
-
-    @property
-    def inherited_settings(self):
-        """
-        Get the settings set by the ancestors (which locally set fields may override or not)
-        """
-        return self._inherited_settings
-
-    @inherited_settings.setter
-    def inherited_settings(self, dictvalue):
-        self._inherited_settings = dictvalue
 
     def get(self, key):
         return self._fields[key.field_name]

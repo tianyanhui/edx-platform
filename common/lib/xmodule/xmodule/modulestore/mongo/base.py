@@ -87,10 +87,8 @@ class MongoKeyValueStore(InheritanceKeyValueStore):
                 return self._category
             elif key.field_name == 'data' and not isinstance(self._data, dict):
                 return self._data
-            elif key.field_name in self._data:
-                return self._data[key.field_name]
             else:
-                raise KeyError()  # get the default
+                return self._data[key.field_name]
         else:
             raise InvalidScopeError(key.scope)
 
