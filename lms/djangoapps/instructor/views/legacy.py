@@ -1243,8 +1243,7 @@ def _do_enroll_students(course, course_id, students, overload=False, auto_enroll
             if email_students:
                 #User enrolled for first time, populate dict with user specific info
                 d['email_address'] = student
-                d['first_name'] = user.first_name
-                d['last_name'] = user.last_name
+                d['full_name'] = user.profile.name
                 d['message'] = 'enrolled_enroll'
                 send_mail_ret = send_mail_to_student(student, d)
                 status[student] += (', email sent' if send_mail_ret else '')
@@ -1315,8 +1314,7 @@ def _do_unenroll_students(course_id, students, email_students=False):
                 if email_students:
                     #User was enrolled
                     d['email_address'] = student
-                    d['first_name'] = user.first_name
-                    d['last_name'] = user.last_name
+                    d['full_name'] = user.profile.name
                     d['message'] = 'enrolled_unenroll'
                     send_mail_ret = send_mail_to_student(student, d)
                     status[student] += (', email sent' if send_mail_ret else '')
@@ -1345,8 +1343,7 @@ def send_mail_to_student(student, param_dict):
     `auto_enroll`: user input option (a `str`)
     `course_url`: url of course (a `str`)
     `email_address`: email of student (a `str`)
-    `first_name`: student first name (a `str`)
-    `last_name`: student last name (a `str`)
+    `full_name`: student full name (a `str`)
     `message`: type of email to send and template to use (a `str`)
                                         ]
     Returns a boolean indicating whether the email was sent successfully.
