@@ -19,7 +19,10 @@ below::
 """
 
 import inspect
+import time
 from importlib import import_module
+
+from statsd import statsd
 
 from django.conf import settings
 
@@ -86,8 +89,11 @@ def send(event):
     Send an event object to all the initialized backends.
 
     """
-    for backend in backends.itervalues():
+    for name, backend in backends.iteritems():
+        start = time.time()
         backend.send(event)
+        duration = time.time() - start
+        statsd.histogram('track.backend.{0}.time'.format(name), duration)
 
 
 _initialize_backends_from_django_settings()
