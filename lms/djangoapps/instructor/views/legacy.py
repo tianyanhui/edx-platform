@@ -50,6 +50,7 @@ from instructor_task.views import get_task_completion_info
 from mitxmako.shortcuts import render_to_response
 from psychometrics import psychoanalyze
 from student.models import CourseEnrollment, CourseEnrollmentAllowed
+from student.views import course_from_id
 import track.views
 from mitxmako.shortcuts import render_to_string
 
@@ -57,6 +58,7 @@ from mitxmako.shortcuts import render_to_string
 from bulk_email.models import CourseEmail
 from html_to_text import html_to_text
 from bulk_email import tasks
+
 
 log = logging.getLogger(__name__)
 
@@ -1190,10 +1192,11 @@ def _do_enroll_students(course, course_id, students, overload=False, auto_enroll
     if email_students:
         stripped_site_name = _remove_preview(settings.SITE_NAME)
         registration_url = 'https://' + stripped_site_name + reverse('student.views.register_user')
+        course = course_from_id(course_id)
         #Composition of email
         d = {'site_name': stripped_site_name,
              'registration_url': registration_url,
-             'course_id': course_id,
+             'course': course,
              'auto_enroll': auto_enroll,
              'course_url': 'https://' + stripped_site_name + '/courses/' + course_id,
              }
@@ -1279,9 +1282,10 @@ def _do_unenroll_students(course_id, students, email_students=False):
 
     stripped_site_name = _remove_preview(settings.SITE_NAME)
     if email_students:
+        course = course_from_id(course_id)
         #Composition of email
         d = {'site_name': stripped_site_name,
-             'course_id': course_id}
+             'course': course}
 
     for student in old_students:
 
