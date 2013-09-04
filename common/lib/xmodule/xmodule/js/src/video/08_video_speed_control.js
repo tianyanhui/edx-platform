@@ -178,7 +178,7 @@ function () {
                     // If we are tabbing forward (previous focus is empty ie 
                     // play button), we open the dialog and set focus on the 
                     // first speed entry.
-                    if (state.previousFocus === '') {
+                    if (state.previousFocus === 'playPause') {
                         state.videoSpeedControl.el.addClass('open');
                         state.videoSpeedControl.videoSpeedsEl
                         .find('a.speed_link:first')
@@ -195,7 +195,6 @@ function () {
                         .focus();
                     }
                     
-                    state.previousFocus = '';
                 });
 
 
